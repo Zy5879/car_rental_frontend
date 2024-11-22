@@ -24,6 +24,7 @@ export default function MakeReservationModal({
   const [reservedVehicle, setReservedVehicle] = useState<any | null>(null);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [customerId, setCustomerId] = useState("");
+  const [vehicleInput, setVehicleInput] = useState("");
 
   const handleClick = () => {
     setAvailableVehicles([]);
@@ -38,6 +39,7 @@ export default function MakeReservationModal({
     );
     return days * dailyRate;
   };
+
 
   const handleReserveNow = async (vehicleId: string) => {
     try {
@@ -69,14 +71,14 @@ export default function MakeReservationModal({
 
   const fetchAvailableVehicles = async () => {
     if (!pickUpDate || !dropOffDate) {
-      alert("Please fill in required Fields");
+      alert("Please fill in required fields");
       return;
     }
     try {
       const response = await axios.get(
         "http://localhost:8000/vehicles/available",
         {
-          params: { pickUpDate, dropOffDate },
+          params: { pickUpDate, dropOffDate, vehicleInput },
         }
       );
       setAvailableVehicles(response.data);
@@ -128,6 +130,12 @@ export default function MakeReservationModal({
           placeholder="YYYY-MM-DD"
           value={dropOffDate}
           onChange={(e) => setDropOffDate(e.target.value)}
+        ></TextInput>
+        <TextInput
+          label="Search for a Vehicle"
+          placeholder="Toyota"
+          value={vehicleInput}
+          onChange={(e) => setVehicleInput(e.target.value)}
         ></TextInput>
         <Button mt="md" onClick={fetchAvailableVehicles}>
           Find Available Vehicles
