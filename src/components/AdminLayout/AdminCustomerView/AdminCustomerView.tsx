@@ -108,6 +108,29 @@ export default function AdminCustomerView() {
     setEditModalOpen(true);
   };
 
+  const handleDelete = async (customer: RowData) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/admin/customers/${customer.id}`,
+      );
+      console.log(response);
+
+      setCustomerData((prevData) =>
+        prevData.filter((data) => data.id !== customer.id)
+      );
+      
+      setSortedData((prevData) =>
+        prevData.filter((data) => data.id !== customer.id)
+      );
+      alert("Customer deleted successfully.");
+
+    }
+
+    catch(error) { 
+      console.log(error)
+    }
+  };
+
   const handleUpdateCustomer = async () => {
     if (!editingCustomer) return;
 
@@ -185,7 +208,7 @@ export default function AdminCustomerView() {
         <Button size="xs" onClick={() => handleEdit(row)}>
           Edit
         </Button>
-        <Button size="xs">Delete</Button>
+        <Button onClick={() => handleDelete(row)} size="xs">Delete</Button>
       </Table.Td>
     </Table.Tr>
   ));
